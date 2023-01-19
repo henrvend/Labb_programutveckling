@@ -9,6 +9,7 @@ public class Game {
 	public static boolean gameOn;
 	public static boolean gameWin;
 	private Player player;
+	private Ball ball;
 	private ArrayList<RedBox> redBlocks;
 	private ArrayList<BlueBox> blueBlocks;
 	private ArrayList<GreenBox> greenBlocks;
@@ -20,7 +21,8 @@ public class Game {
 		
 		points=100;
 		
-		player = new Player(400, 300, 40, 40, Color.orange);
+		ball = new Ball(380, 300, 20, 20);
+		player = new Player(350, 500, 100, 20, Color.orange);
 		gameOn=true;
 		gameWin = false;
 		redBlocks = new ArrayList<RedBox>();
@@ -78,12 +80,10 @@ public class Game {
 		tickcount++;
 	}
 	
-	
-	
-	
 	public void draw(Graphics2D graphics) {
 		Images i = new Images();
 		player.draw(graphics);
+		ball.draw(graphics);
 		
 		for(RedBox cubes: redBlocks) {
 		cubes.draw(graphics);
