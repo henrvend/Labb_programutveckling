@@ -34,6 +34,7 @@ public class Game {
 
 	public void update(Keyboard keyboard) {
 		player.update(keyboard);
+		ball.update(keyboard);
 		if(points>pointsMax) {
 					pointsMax=points;
 				}

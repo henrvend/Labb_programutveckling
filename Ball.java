@@ -11,6 +11,11 @@ public class Ball extends Sprite{
 	@Override
 	public void update(Keyboard keyboard) {
 		
+		setY(getY()+2);
+		
+		if(getY()==600) {
+			Game.gameOn=false;
+		}
 		
 	}
 
