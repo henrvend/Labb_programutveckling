@@ -10,7 +10,7 @@ public class BlueBox extends ColoredBox{
 
 	@Override
 	public void update(Keyboard keyboard) {
-		setY(getY()+1);
+		
 		
 	}
 	@Override

@@ -11,7 +11,7 @@ public class RedBox extends ColoredBox{
 	
 	@Override
 	public void update(Keyboard keyboard) {
-		setY(getY()+3);
+		
 		
 	}
 	

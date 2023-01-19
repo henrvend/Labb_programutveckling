@@ -15,11 +15,15 @@ public class Player extends Sprite{
 	@Override 
 	public void update(Keyboard keyboard) {
 		
-		if(keyboard.isKeyDown(Key.Left)) {
-			setX(getX()-4);
+		if(getX()>5) {
+			if(keyboard.isKeyDown(Key.Left)) {
+				setX(getX()-4);
+			}
 		}
-		if(keyboard.isKeyDown(Key.Right)) {
-			setX(getX()+4);
+			if(getX()<695) {
+			if(keyboard.isKeyDown(Key.Right)) {
+				setX(getX()+10);
+			}
 		}
 		
 	}
@@ -31,24 +35,4 @@ public class Player extends Sprite{
 		
 	}
 
-
-
-	public boolean isCollidingRed(RedBox cubes) {
-		Rectangle playerBox = new Rectangle(getX(), getY(), getWidth(), getHeight());
-		Rectangle enemyBlock = new Rectangle(cubes.getX(), cubes.getY(), cubes.getWidth(), cubes.getHeight());
-		return playerBox.intersects(enemyBlock);		
-		
-	}
-	public boolean isCollidingGreen(GreenBox cubes) {
-		Rectangle playerBox = new Rectangle(getX(), getY(), getWidth(), getHeight());
-		Rectangle enemyBlock = new Rectangle(cubes.getX(), cubes.getY(), cubes.getWidth(), cubes.getHeight());
-		return playerBox.intersects(enemyBlock);		
-		
-	}
-	public boolean isCollidingBlue(BlueBox cubes) {
-		Rectangle playerBox = new Rectangle(getX(), getY(), getWidth(), getHeight());
-		Rectangle enemyBlock = new Rectangle(cubes.getX(), cubes.getY(), cubes.getWidth(), cubes.getHeight());
-		return playerBox.intersects(enemyBlock);		
-		
-	}
 }
