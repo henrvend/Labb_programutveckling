@@ -47,24 +47,37 @@ public class Game {
 			ball.setDirectionY(Const.BALL_DIRECTION);
 		}
 		
-		for(RedBox cubes : redBlocks) {
-			cubes.update(keyboard);
-			if(ball.isCollidingRed(cubes)) {
+		for(int i=redBlocks.size()-1; i>0; i--) {
+			redBlocks.get(i).update(keyboard);
+			if(ball.isCollidingRed(redBlocks.get(i))) {
 				ball.setDirectionY(Const.BALL_DIRECTION);
+				redBlocks.remove(redBlocks.get(i));
 				}
 			}
-		for(BlueBox cubes: blueBlocks) {
-			cubes.update(keyboard);
-			if(ball.isCollidingBlue(cubes)) {
+		for(int i=blueBlocks.size()-1; i>0; i--) {
+			blueBlocks.get(i).update(keyboard);
+			if(ball.isCollidingBlue(blueBlocks.get(i))) {
 				ball.setDirectionY(Const.BALL_DIRECTION);
+				redBlocks.remove(redBlocks.get(i));
+				}
+			}
+		
+		for(int i=greenBlocks.size()-1; i>0; i--) {
+			greenBlocks.get(i).update(keyboard);
+			if(ball.isCollidingGreen(greenBlocks.get(i))) {
+				ball.setDirectionY(Const.BALL_DIRECTION*-1);
+				System.out.println("test");
+				greenBlocks.remove(greenBlocks.get(i));
 			}
 		}
-		for(GreenBox cubes: greenBlocks) {
+		
+	/*	for(GreenBox cubes: greenBlocks) {
 			cubes.update(keyboard);
 			if(ball.isCollidingGreen(cubes)) {
-				ball.setDirectionY(Const.BALL_DIRECTION);
+				
+				
 			}
-		}
+		}*/
 		if(points<0) {
 			System.out.println("GameOver!");
 			gameOn=false;

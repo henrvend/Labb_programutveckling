@@ -17,7 +17,7 @@ public class Player extends Sprite{
 		
 		if(getX()>5) {
 			if(keyboard.isKeyDown(Key.Left)) {
-				setX(getX()-4);
+				setX(getX()-10);
 			}
 		}
 			if(getX()<695) {

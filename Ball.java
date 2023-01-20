@@ -21,8 +21,8 @@ public class Ball extends Sprite{
 		if(getY()<0) {
 			directionY=-directionY;
 		}
-		setX(getX()-directionX);
-		setY(getY()-directionY*-1);
+		setX(getX()+directionX*-1);
+		setY(getY()+directionY*+1);
 		
 		
 		if(getY()==600-Const.BALLSIZE) {
