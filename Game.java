@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.*;
 
 import javax.swing.JFrame;
@@ -10,6 +12,7 @@ public class Game {
 	public static boolean gameWin;
 	private Player player;
 	private Ball ball;
+	private CollisionDetection collide;
 	private ArrayList<RedBox> redBlocks;
 	private ArrayList<BlueBox> blueBlocks;
 	private ArrayList<GreenBox> greenBlocks;
@@ -24,6 +27,7 @@ public class Game {
 		points		= 100;
 		tickCount	= 0;
 		
+		collide  = new CollisionDetection();
 		ball = new Ball(380, 300, Const.BALLSIZE, Const.BALLSIZE);
 		player = new Player(350, 500, Const.PLAYER_WIDTH, Const.PLAYER_HEIGHT, Color.orange);
 		gameOn=true;
@@ -49,26 +53,13 @@ public class Game {
 			timePoints--;
 		}
 		
-		if(ball.isCollidingPlayer(player)) {
-			//check where ball lands on plattform and from that position gives or take away speed 
-			if((ball.getX()>(player.getX()+(player.getWidth()/3)))&&(ball.getX()<(player.getX()+(player.getWidth()/3*2)))) {
-				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
-				if(ball.getDirectionX()>0) {
-					ball.setDirectionX((ball.getDirectionX()-1));
-				}else {
-					ball.setDirectionX((ball.getDirectionX()+1));
-				}
-				System.out.println("Mitten");
-			}else if(ball.getDirectionX()<0){
-				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
-				ball.setDirectionX(ball.getDirectionX()-1);
-			}else {
-				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
-				ball.setDirectionX(ball.getDirectionX()+1);
-			}
-		}
 		
-		//blockcolision detection
+		collide.collisionDetectionPB(player, ball);
+		
+		
+		collide.collisionBlocks(redBlocks, ball, keyboard, points, blocksGenerated);
+		
+		
 		for(int i=redBlocks.size()-1; i>=0; i--) {
 			redBlocks.get(i).update(keyboard);
 			if(ball.isCollidingRed(redBlocks.get(i))) {
@@ -77,9 +68,9 @@ public class Game {
 				System.out.println("points+2 : "+points); 
 				redBlocks.remove(redBlocks.get(i));
 				blocksGenerated--;
-				
-				}
 			}
+		}
+		
 		for(int i=blueBlocks.size()-1; i>=0; i--) {
 			blueBlocks.get(i).update(keyboard);
 			if(ball.isCollidingBlue(blueBlocks.get(i))) {
