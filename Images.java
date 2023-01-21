@@ -29,7 +29,7 @@ public class Images{
 		
 		graphics.drawImage(win, 0, 0, null);
 		graphics.setColor(Color.white);
-		graphics.drawString("You WIN!!", 500, 300);
+		graphics.drawString("You WIN!!", 300, 500);
 		
 	}
 

@@ -14,12 +14,15 @@ public class Game {
 	private ArrayList<BlueBox> blueBlocks;
 	private ArrayList<GreenBox> greenBlocks;
 
-	private int tickCount=0;
+	private int tickCount;
 	private int points;
+	private int timePoints;
 	public int pointsMax;
+	private int blocksGenerated=30;
 	public Game(GameBoard board) {
-		
-		points=100;
+		timePoints 	= 100;
+		points		= 100;
+		tickCount	= 0;
 		
 		ball = new Ball(380, 300, Const.BALLSIZE, Const.BALLSIZE);
 		player = new Player(350, 500, Const.PLAYER_WIDTH, Const.PLAYER_HEIGHT, Color.orange);
@@ -42,47 +45,69 @@ public class Game {
 		if(points>pointsMax) {
 			pointsMax=points;		
 		}
+		if(tickCount%100==0) {
+			timePoints--;
+		}
 		
 		if(ball.isCollidingPlayer(player)) {
-			ball.setDirectionY(Const.BALL_DIRECTION);
+			//check where ball lands on plattform and from that position gives or take away speed 
+			if((ball.getX()>(player.getX()+(player.getWidth()/3)))&&(ball.getX()<(player.getX()+(player.getWidth()/3*2)))) {
+				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
+				if(ball.getDirectionX()>0) {
+					ball.setDirectionX((ball.getDirectionX()-1));
+				}else {
+					ball.setDirectionX((ball.getDirectionX()+1));
+				}
+				System.out.println("Mitten");
+			}else if(ball.getDirectionX()<0){
+				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
+				ball.setDirectionX(ball.getDirectionX()-1);
+			}else {
+				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
+				ball.setDirectionX(ball.getDirectionX()+1);
+			}
 		}
 		
-		for(int i=redBlocks.size()-1; i>0; i--) {
+		//blockcolision detection
+		for(int i=redBlocks.size()-1; i>=0; i--) {
 			redBlocks.get(i).update(keyboard);
 			if(ball.isCollidingRed(redBlocks.get(i))) {
-				ball.setDirectionY(Const.BALL_DIRECTION);
+				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
+				points+=2;
+				System.out.println("points+2 : "+points); 
 				redBlocks.remove(redBlocks.get(i));
+				blocksGenerated--;
+				
 				}
 			}
-		for(int i=blueBlocks.size()-1; i>0; i--) {
+		for(int i=blueBlocks.size()-1; i>=0; i--) {
 			blueBlocks.get(i).update(keyboard);
 			if(ball.isCollidingBlue(blueBlocks.get(i))) {
-				ball.setDirectionY(Const.BALL_DIRECTION);
-				redBlocks.remove(redBlocks.get(i));
+				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
+				points++;
+				System.out.println("points+1 : "+points); 
+				blueBlocks.remove(blueBlocks.get(i));
+				blocksGenerated--;
 				}
 			}
 		
-		for(int i=greenBlocks.size()-1; i>0; i--) {
+		for(int i=greenBlocks.size()-1; i>=0; i--) {
 			greenBlocks.get(i).update(keyboard);
 			if(ball.isCollidingGreen(greenBlocks.get(i))) {
-				ball.setDirectionY(Const.BALL_DIRECTION*-1);
-				System.out.println("test");
+				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
+				points++;
+				System.out.println("points+1 : "+points); 
 				greenBlocks.remove(greenBlocks.get(i));
+				blocksGenerated--;
 			}
 		}
 		
-	/*	for(GreenBox cubes: greenBlocks) {
-			cubes.update(keyboard);
-			if(ball.isCollidingGreen(cubes)) {
-				
-				
-			}
-		}*/
-		if(points<0) {
+	
+		if(points<0||timePoints<0) {
 			System.out.println("GameOver!");
 			gameOn=false;
 		}
-		if(points>200) {
+		if(blocksGenerated==0) {
 			gameWin=true;
 		}
 		tickCount++;
@@ -92,6 +117,8 @@ public class Game {
 		Images i = new Images();
 		player.draw(graphics);
 		ball.draw(graphics);
+		
+		
 		
 		for(RedBox cubes: redBlocks) {
 		cubes.draw(graphics);
@@ -103,8 +130,10 @@ public class Game {
 			cubes.draw(graphics);
 		}
 		if(!gameOn) {
-			System.out.println(pointsMax);
-			i.gameOverScreen(graphics, pointsMax);
+			System.out.println(pointsMax+timePoints);
+			i.gameOverScreen(graphics, (pointsMax+timePoints));
+			FileHandler file = new FileHandler(pointsMax+timePoints);
+			
 			
 		}
 		if(gameWin) {
