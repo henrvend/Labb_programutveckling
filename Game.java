@@ -21,7 +21,7 @@ public class Game {
 	private int points;
 	private int timePoints;
 	public int pointsMax;
-	private int blocksGenerated=30;
+	
 	public Game(GameBoard board) {
 		timePoints 	= 100;
 		points		= 100;
@@ -44,62 +44,27 @@ public class Game {
 	}
 
 	public void update(Keyboard keyboard) {
+		
 		player.update(keyboard);
 		ball.update(keyboard);
+		
+		collide.collisionDetectionPB(player, ball);
+		
+		collide.collisionBlocksRed(redBlocks, ball, keyboard, points);
+		collide.collisionBlocksBlue(blueBlocks, ball, keyboard, points);
+		collide.collisionBlocksGreen(greenBlocks, ball, keyboard, points);		
+		if(collide.getBlocksGenerated()==0) {
+			Game.gameWin=true;
+		}
+		if(points<0||timePoints<0) {
+			System.out.println("GameOver!");
+			gameOn=false;
+		}
 		if(points>pointsMax) {
 			pointsMax=points;		
 		}
 		if(tickCount%100==0) {
 			timePoints--;
-		}
-		
-		
-		collide.collisionDetectionPB(player, ball);
-		
-		
-		collide.collisionBlocks(redBlocks, ball, keyboard, points, blocksGenerated);
-		
-		
-		for(int i=redBlocks.size()-1; i>=0; i--) {
-			redBlocks.get(i).update(keyboard);
-			if(ball.isCollidingRed(redBlocks.get(i))) {
-				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
-				points+=2;
-				System.out.println("points+2 : "+points); 
-				redBlocks.remove(redBlocks.get(i));
-				blocksGenerated--;
-			}
-		}
-		
-		for(int i=blueBlocks.size()-1; i>=0; i--) {
-			blueBlocks.get(i).update(keyboard);
-			if(ball.isCollidingBlue(blueBlocks.get(i))) {
-				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
-				points++;
-				System.out.println("points+1 : "+points); 
-				blueBlocks.remove(blueBlocks.get(i));
-				blocksGenerated--;
-				}
-			}
-		
-		for(int i=greenBlocks.size()-1; i>=0; i--) {
-			greenBlocks.get(i).update(keyboard);
-			if(ball.isCollidingGreen(greenBlocks.get(i))) {
-				ball.setDirectionY(ball.getDirectionY()*ball.getDirection());
-				points++;
-				System.out.println("points+1 : "+points); 
-				greenBlocks.remove(greenBlocks.get(i));
-				blocksGenerated--;
-			}
-		}
-		
-	
-		if(points<0||timePoints<0) {
-			System.out.println("GameOver!");
-			gameOn=false;
-		}
-		if(blocksGenerated==0) {
-			gameWin=true;
 		}
 		tickCount++;
 	}
